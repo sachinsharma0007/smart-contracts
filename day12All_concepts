@@ -1,0 +1,105 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Day12_allConcept__ParkingSystem{
+
+    address public parkingowner;
+    uint256 public totalSlots;
+    uint256 public occupiedSlots;
+    uint256 public parkingfees;
+    string[] public vehiclelist;
+
+    constructor(uint256 _totalSlots, uint256 _parkingfees) {
+        parkingowner = msg.sender;
+        totalSlots = _totalSlots;
+        parkingfees = _parkingfees;
+    }
+
+    struct vehicle{
+        string vehicleNumber;
+        address vehicleowner;
+        uint256 entrytime;
+        uint256 slotNumber;
+        Status status;
+    }
+
+    enum Status {None, Parked, Left}
+
+    mapping(string => vehicle) public Details;
+    mapping(uint256 => bool) public Slot_occupied;
+
+    modifier onlyowner() {
+        require(msg.sender == parkingowner, "You are not the owner");
+        _;
+    }
+
+    event vehicleParked(
+        string vehicleNumber,
+        address vehicleowner,
+        uint256 slotNumber,
+        uint256 entrytime
+    );
+
+    event vehicleleft(
+        string vehicleNumber,
+        uint256 exit_time
+    );
+
+    function parkVehicle(string memory _vehicleNumber) public payable {
+
+        require(msg.value >= parkingfees, "parking fee not paid");
+        require(occupiedSlots < totalSlots, "parking full");
+        require(Details[_vehicleNumber].status != Status.Parked, "vehicle already parked");
+
+        uint256 assignedSlot;
+        for(uint256 i = 1; i <= totalSlots; i++) {
+            if(!Slot_occupied[i]) {
+                assignedSlot = i;
+                Slot_occupied[i] = true;
+                break;
+            }
+        }
+
+        Details[_vehicleNumber] = vehicle({
+            vehicleNumber : _vehicleNumber,
+            vehicleowner : msg.sender,
+            slotNumber : assignedSlot,
+            entrytime : block.timestamp,
+            status : Status.Parked
+        });
+
+        occupiedSlots++;
+
+        vehiclelist.push(_vehicleNumber);
+
+        emit vehicleParked(
+            _vehicleNumber,
+            msg.sender,
+            assignedSlot,
+            block.timestamp
+        );
+    }
+
+    function leaveParking(string memory _vehicleNumber) public{
+
+        require(Details[_vehicleNumber].status == Status.Parked, "vehicle not parked");
+        require(Details[_vehicleNumber].vehicleowner == msg.sender, "not vehicle owner");
+
+        Details[_vehicleNumber].status = Status.Left;
+
+        occupiedSlots-- ;
+
+        uint256 slot = Details[_vehicleNumber].slotNumber;
+        Slot_occupied[slot] = false;
+
+        emit vehicleleft(
+            _vehicleNumber,
+            block.timestamp
+        );
+    }
+
+    function withdrawCollection() public onlyowner{
+        payable(parkingowner).transfer(address(this).balance);
+    }
+
+}
