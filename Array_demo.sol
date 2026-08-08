@@ -17,5 +17,8 @@ contract Array_Demo{
     function get_numbers () public view returns (uint [] memory) {
         return numbers;
     }
+    function get_names () public view returns (string [] memory) {
+        return names;
+    }
 
 }
