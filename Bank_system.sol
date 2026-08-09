@@ -34,7 +34,5 @@ contract Bank{
         Get[msg.sender].balance -= amount;
     }
 
-    function get_balance(address user) public view onlyowner returns (string memory, uint) {
-        return (Get[user].name, Get[user].balance);
-    }
+
 }
