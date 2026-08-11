@@ -9,6 +9,9 @@ contract SimpleToken is ERC20 {
         string memory name,
         string memory symbol,
         uint256 initialSupply
+) ERC20 (name, symbol) {
+        _mint(msg.sender, initialSupply * 10 ** decimals());
+    }
     
 }
 
