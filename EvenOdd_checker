@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 contract EvenOdd {
-    function check() public pure returns(string memory) {
+    function check(uint num) public pure returns(string memory) {
         if(num % 2 == 0) {
             return "Even";
         } else {
