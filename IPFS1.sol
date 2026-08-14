@@ -5,9 +5,7 @@ contract IPFSStorage {
 
     string public fileCID;
 
-    function storeCID(string memory _cid) public {
-        fileCID = _cid;
-    }
+    
 
     function getFileURL() public view returns(string memory) {
         return string(
