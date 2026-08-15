@@ -28,7 +28,5 @@ contract UserBank{
         TotalBalance -= _amount;
     }
 
-    function Get_Balance () external view returns (uint){
-        return TotalBalance;   
-    }
+    
 }
