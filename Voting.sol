@@ -12,7 +12,7 @@ contract Voting {
     address public owner;
 
     mapping(uint => Candidate) private candidates;
-    mapping(address => bool) private hasVoted;
+    
 
     uint public candidatesCount;
     uint private totalVoters;
