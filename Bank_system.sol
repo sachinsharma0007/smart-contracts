@@ -32,3 +32,9 @@ contract Bank{
         return (Get[user].name, Get[user].balance);
     }
 }
+function withdraw(string memory name, uint amount) public {
+        require(amount > 100,"Not met Minimum withdraw amount");
+        require(Get[msg.sender].balance >= amount, "Insufficient balance");
+        Get[msg.sender].name = name;
+        Get[msg.sender].balance -= amount;
+    }
