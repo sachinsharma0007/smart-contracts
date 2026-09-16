@@ -15,9 +15,7 @@ contract Marks_Set{
     marks = _marks;
   }
 
-  function get_marks() external view returns (uint) {
-    return marks;
-  }
+  
 
 
 }
