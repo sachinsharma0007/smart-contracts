@@ -9,6 +9,9 @@ contract RandomNumber {
         return (random % 100) + 1;
     }
 
-    
+    function practice() public view returns (bytes32) {
+    bytes32 _hash = keccak256(abi.encodePacked(block.timestamp, msg.sender));
+    return _hash;
+    }
 }
 
